@@ -6,10 +6,11 @@ export class Renderer {
     static ctx;
 
     static init() {
-        Renderer.canvas = document.createElement('canvas');
+        Renderer.canvas = document.getElementById('game');
         Renderer.canvas.width = window.innerWidth;
         Renderer.canvas.height = window.innerHeight;
-        Renderer.canvas.style.backgroundColor = '#000';
+        // Renderer.canvas.style.backgroundColor = '#000';
+        Renderer.canvas.style.backgroundImage = 'linear-gradient(red, yellow)';
         Renderer.ctx = Renderer.canvas.getContext('2d');
 
         document.body.appendChild(Renderer.canvas);

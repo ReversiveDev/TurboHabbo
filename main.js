@@ -36,10 +36,10 @@ let top = [
     for(let i = tiles.length-1; i >= 0; i--) {
         let tile = tiles[i];
         if(tile.mouseIsOver && !selectedTile) {
-            tile.color = '#f00';
+            tile.color = '#ccc';
             selectedTile = tile;
             tile.updateSprite();
-        }else if(tile.color == '#f00') {
+        }else if(tile.color == '#ccc') {
             tile.color = '#fff';
             tile.updateSprite();
         }
