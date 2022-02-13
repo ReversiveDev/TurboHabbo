@@ -1,6 +1,7 @@
 import { Mouse } from "./Mouse.js";
 import { Renderer } from "./Renderer.js";
 import { Vector2 } from "./Vector2.js";
+import { Sprite } from "./Sprite.js";
 
 export class IsometricTile {
 
@@ -21,24 +22,54 @@ export class IsometricTile {
         this.width = this.height * 2;
         this.color = color;
         this.mouseIsOver = false;
+        this.sprite = new Sprite(this.x-50, this.y);
 
-        this.vertices = [
-            IsometricTile.projectPoint(0, 0).add(this),
-            IsometricTile.projectPoint(this.height, 0).add(this),
-            IsometricTile.projectPoint(this.height, this.height).add(this),
-            IsometricTile.projectPoint(0, this.height).add(this)
+        this.topVertices = [
+            IsometricTile.projectPoint(0, 0),
+            IsometricTile.projectPoint(this.height, 0),
+            IsometricTile.projectPoint(this.height, this.height),
+            IsometricTile.projectPoint(0, this.height)
         ];
+
+        this.borderSize = 10;
+
+        this.rightVertices = [
+            IsometricTile.projectPoint(this.height, 0),
+            IsometricTile.projectPoint(this.height+this.borderSize, this.borderSize),
+            IsometricTile.projectPoint(this.height+this.borderSize, this.height+this.borderSize),
+            IsometricTile.projectPoint(this.height, this.height)
+        ];
+
+        this.leftVertices = [
+            IsometricTile.projectPoint(0, this.height),
+            IsometricTile.projectPoint(this.borderSize, this.height+this.borderSize),
+            IsometricTile.projectPoint(this.height+this.borderSize, this.height+this.borderSize),
+            IsometricTile.projectPoint(this.height, this.height)
+        ];
+
+        this.updateSprite();
 
     }
 
+    update() {
+        // Renderer.ctx.fillStyle = this.color;
+        this.mouseIsOver = Mouse.isInsideSprite(this.sprite);
+    }
+
     draw() {
-        Renderer.ctx.fillStyle = this.color;
-        this.mouseIsOver = Mouse.isInsideRect(this.rectHitBox) && Mouse.isInsidePolygon(this.vertices)
-        if (this.mouseIsOver) {
-            Renderer.ctx.fillStyle = '#f00';
-        }
-        Renderer.drawPath(this.vertices);
-        Renderer.ctx.fill();
+        this.sprite.draw();
+    }
+
+    updateSprite() {
+        this.sprite.clear();
+        this.sprite.expand(this.width, this.height+this.borderSize);
+        this.sprite.drawPolygon(this.topVertices, this.color, this.height);
+        this.sprite.fill();
+        this.sprite.stroke();
+        this.sprite.drawPolygon(this.rightVertices, "#c1c1c1", this.height);
+        this.sprite.fill();
+        this.sprite.drawPolygon(this.leftVertices, "#a1a1a1", this.height);
+        this.sprite.fill();
     }
 
     static projectPoint(x, y) {

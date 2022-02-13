@@ -47,6 +47,12 @@ export class Mouse {
         return x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height;
     }
 
-
+    // check if mouse is inside the given sprite
+    static isInsideSprite(sprite) {
+        if(!sprite.loaded) return false;
+        let x = Mouse.position.x;
+        let y = Mouse.position.y;
+        return this.isInsideRect(sprite) && sprite.getPixel(x - sprite.x, y - sprite.y)?.color.a > 0;
+    }
 
 }
