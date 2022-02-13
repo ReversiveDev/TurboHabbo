@@ -12,6 +12,7 @@ export class Renderer {
         // Renderer.canvas.style.backgroundColor = '#000';
         Renderer.canvas.style.backgroundImage = 'linear-gradient(red, yellow)';
         Renderer.ctx = Renderer.canvas.getContext('2d');
+        Renderer.ctx.imageSmoothEnabled = false;
 
         document.body.appendChild(Renderer.canvas);
     }

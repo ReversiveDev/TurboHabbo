@@ -1,5 +1,4 @@
 import { Vector2 } from "./Vector2.js";
-import { Renderer } from "./Renderer.js";
 
 export class Mouse {
 

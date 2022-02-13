@@ -1,4 +1,3 @@
-import { Color } from "./Color.js";
 
 export class Pixel {
 

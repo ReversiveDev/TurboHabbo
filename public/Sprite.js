@@ -33,15 +33,18 @@ export class Sprite {
         this.y = y;
         this.canvas = document.createElement('canvas');
         this.ctx = this.canvas.getContext('2d');
+        this.ctx.imageSmoothingEnabled = false;
         this.image = new Image();
         this.image.src = source;
         if(source === undefined) {
             this.loaded = true;
         }else {
             this.image.onload = () => {
+                console.log(x, y)
                 this.loaded = true;
                 this.canvas.width = this.image.width;
                 this.canvas.height = this.image.height;
+                this.drawImage(this.image, 0, 0);
             }
 
             this.image.onerror = () => {
@@ -75,6 +78,12 @@ export class Sprite {
         this.updated = false;
     }
 
+    drawImage(image, x = 0, y = 0) {
+        if(!this.loaded || !image) return;
+        this.ctx.drawImage(image, x, y);
+        this.updated = false;
+    }
+
     fill() {
         this.ctx.fill();
         this.updated = false;
@@ -89,6 +98,7 @@ export class Sprite {
         if(!this.loaded) return;
         let newCanvas = document.createElement('canvas');
         let newCtx = newCanvas.getContext('2d');
+        newCtx.imageSmoothingEnabled = false;
         newCanvas.width = width;
         newCanvas.height = height;
         newCtx.drawImage(this.canvas, 0, 0);

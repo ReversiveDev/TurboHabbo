@@ -1,5 +1,4 @@
 import { Mouse } from "./Mouse.js";
-import { Renderer } from "./Renderer.js";
 import { Vector2 } from "./Vector2.js";
 import { Sprite } from "./Sprite.js";
 

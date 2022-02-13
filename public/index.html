@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="main.js" type="module"></script>
+    <link rel="stylesheet" href="style/2.css">
+    <script defer>
+        function make(){
+            let unhide_btn = document.querySelector("#unhide-btn");
+            let footer = document.querySelector(".footer");
+            let footer_elements = document.querySelectorAll(".footer *:not(.unhide-btn)");
+            unhide_btn.style.display = "none";
+            footer.classList.add("unhide-footer");
+            for(let element of footer_elements){
+                element.style.display = "block";
+                element.classList.add("unhide-footer-element");
+            }
+        }
+    </script>
+</head>
+
+<body style="margin: 0; overflow: hidden;">
+    <div id="container">
+        <canvas id="game"></canvas>
+        <div id="hud">
+            <div class="footer">
+                <img src="/assets/house.png" alt="">
+                <img src="/assets/navigator.png" alt="">
+                <img src="/assets/catalog.png" alt="">
+                <img src="/assets/inventory.png" alt="">
+                <button id="unhide-btn" class="unhide-btn" onclick="make()">+</button>
+                <!-- <img src="/assets/download.png" alt=""> -->
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
