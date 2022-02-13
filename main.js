@@ -33,20 +33,19 @@ let top = [
 
     // draw tiles
     let selectedTile = null;
-    for(let tile of tiles) {
-        tile.update();
-        if(tile.color == '#f00') {
+    for(let i = tiles.length-1; i >= 0; i--) {
+        let tile = tiles[i];
+        if(tile.mouseIsOver && !selectedTile) {
+            tile.color = '#f00';
+            selectedTile = tile;
+            tile.updateSprite();
+        }else if(tile.color == '#f00') {
             tile.color = '#fff';
             tile.updateSprite();
         }
-        if(!selectedTile) {
-            if(tile.mouseIsOver){
-                tile.color = '#f00';
-                selectedTile = tile;
-                tile.updateSprite();
-            }
-        }
-
+    }
+    for(let tile of tiles) {
+        tile.update();
         tile.draw();
     }
 

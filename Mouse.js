@@ -1,4 +1,5 @@
 import { Vector2 } from "./Vector2.js";
+import { Renderer } from "./Renderer.js";
 
 export class Mouse {
 
@@ -44,7 +45,7 @@ export class Mouse {
     static isInsideRect(rect) {
         let x = Mouse.position.x;
         let y = Mouse.position.y;
-        return x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height;
+        return x > rect.x && x < rect.x + rect.width && y > rect.y && y < rect.y + rect.height;
     }
 
     // check if mouse is inside the given sprite
@@ -52,7 +53,7 @@ export class Mouse {
         if(!sprite.loaded) return false;
         let x = Mouse.position.x;
         let y = Mouse.position.y;
-        return this.isInsideRect(sprite) && sprite.getPixel(x - sprite.x, y - sprite.y)?.color.a > 0;
+        return this.isInsideRect(sprite) && sprite.getPixel(Math.floor(x - sprite.x), Math.floor(y - sprite.y))?.color.a > 0;
     }
 
 }
