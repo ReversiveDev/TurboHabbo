@@ -4,6 +4,19 @@ export class Renderer {
 
     static canvas;
     static ctx;
+    /**
+     * @private
+     */
+    static _cursor;
+
+    static get cursor(){
+        return Renderer._cursor;
+    }
+
+    static set cursor(value){
+        Renderer._cursor = value;
+        Renderer.canvas.style.cursor = value;
+    }
 
     static init() {
         Renderer.canvas = document.getElementById('game');

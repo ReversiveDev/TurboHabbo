@@ -4,6 +4,14 @@ import { Mouse } from "./Mouse.js";
 import { Sprite } from "./Sprite.js";
 import { XMLParser } from "./XMLParser.js";
 
+// parse url parameters
+let URLParams = {};
+window.location.search.substr(1).split("&").map(x => {
+    let parts = x.split("=");
+    URLParams[parts[0]] = parts[1];
+    return parts;
+});
+
 Renderer.init();
 Mouse.init();
 
@@ -27,13 +35,13 @@ let top = [
     IsometricTile.projectPoint(0, 32)
 ];
 
-let furniName = 'chair_basic';
+let furniName = URLParams.furniname || "chair_plasty";
 let layerCount = 0;
-let direction = 2;
+let direction = URLParams.direction || 0;
 let state = 0;
 let size = 64;
 let sprites = [];
-let furniX = Math.floor(innerWidth/2);
+let furniX = Math.floor(innerWidth / 2);
 let furniY = 300;
 fetch(`/assets/furniture/${furniName}/${furniName}_visualization.xml`)
     .then(async response => {
@@ -44,15 +52,44 @@ fetch(`/assets/furniture/${furniName}/${furniName}_visualization.xml`)
 fetch(`/assets/furniture/${furniName}/${furniName}_assets.xml`)
     .then(async response => {
         let json = XMLParser.toJSON(await response.text()).asset;
+        let sprs = [];
+        let furni = new Sprite(furniX, furniY);
+        let maxW = 0;
+        let maxH = 0;
+        let maxX = 0;
+        let maxY = 0;
+        let flipH = false;
         for (let i = 0; i < layerCount; i++) {
             let layer = String.fromCharCode(97 + i);
             let name = `${furniName}_${size}_${layer}_${direction}_${state}`;
-            let sprite = new Sprite(furniX - Number(json[name].x), furniY - Number(json[name].y), `/assets/furniture/${furniName}/${json[name].source || name}.png`);
-            sprites.push(sprite);
+            if (!json[name]) continue;
+            let spr = new Sprite(0, 0, `/assets/furniture/${furniName}/${json[name].source || name}.png`);
+
+            await spr.WaitLoad();
+            sprs.push(spr);
+
+            if (spr.width > maxW) maxW = spr.width;
+            if (spr.height > maxH) maxH = spr.height;
+            if (Number(json[name].x) > maxX) maxX = Number(json[name].x);
+            if (Number(json[name].y) > maxY) maxY = Number(json[name].y);
+            if (json[name].flipH) flipH = true;
         }
+        furni.resize(maxW, maxH);
+
+        for (let i = 0; i < layerCount; i++) {
+            let layer = String.fromCharCode(97 + i);
+            let name = `${furniName}_${size}_${layer}_${direction}_${state}`;
+            if (!json[name]) continue;
+            let spr = sprs[i];
+            furni.drawImage(spr, maxX - Number(json[name].x), maxY - Number(json[name].y));
+        }
+        if (flipH) furni.flipH();
+        furni.x -= Math.floor(maxW / 2);
+        sprites.push(furni);
     });
 
 ; (function update() {
+    Renderer.cursor = "default";
     // clear canvas
     Renderer.ctx.clearRect(0, 0, Renderer.canvas.width, Renderer.canvas.height);
 
@@ -78,6 +115,9 @@ fetch(`/assets/furniture/${furniName}/${furniName}_assets.xml`)
     for (let sprite of sprites) {
         // sprite.update();
         sprite.draw();
+        if (Mouse.isInsideSprite(sprite)) {
+            Renderer.cursor = "pointer";
+        }
     }
 
     requestAnimationFrame(update);

@@ -61,7 +61,7 @@ export class IsometricTile {
 
     updateSprite() {
         this.sprite.clear();
-        this.sprite.expand(this.width, this.height+this.borderSize);
+        this.sprite.resize(this.width, this.height+this.borderSize);
         this.sprite.drawPolygon(this.topVertices, this.color, this.height);
         this.sprite.fill();
         this.sprite.stroke();
